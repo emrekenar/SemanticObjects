@@ -7,18 +7,26 @@ public class ConvertToFmu {
         String path = "tank.slx";
         if (args.length > 0)
             path = args[0];
-        System.out.println(path);
 
-        // forward request to openmodelica or simulink converter by input path
+        // extract model name
+        String[] pathElements = path.split("[/]");
+        String baseDir = "";
+        for (int i = 0; i < pathElements.length - 1; ++i) {
+            baseDir += pathElements[i];
+            baseDir += "\\";
+        }
+        String modelName = pathElements[pathElements.length - 1].split("[.]")[0];
+
+        // forward request to openmodelica or simulink converter by input model
         String[] split = path.split("[.]");
         String extension = split[split.length - 1];
         if (extension.equals("slx")) {
-            boolean result = new ConvertSimulink(path).run();
+            boolean result = new ConvertSimulink(path, modelName).run();
             if (result) {
                 System.out.println("success");
             }
         } else if (extension.equals("mo")) {
-            boolean result = new ConvertModelica(path).run();
+            boolean result = new ConvertModelica(path, modelName).run();
             if (result) {
                 System.out.println("success");
             }

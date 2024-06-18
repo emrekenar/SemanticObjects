@@ -7,21 +7,11 @@ import java.util.concurrent.ExecutionException;
 
 public class ConvertSimulink {
     private String path;
-    private String baseDir;
     private String modelName;
 
-    public ConvertSimulink(String path) {
+    public ConvertSimulink(String path, String modelName) {
         this.path = path;
-
-        String[] pathElements = path.split("[/]");
-        String baseDir = "";
-        for (int i = 0; i < pathElements.length - 1; ++i) {
-            baseDir += pathElements[i];
-            baseDir += "\\";
-        }
-        this.baseDir = baseDir;
-
-        this.modelName = pathElements[pathElements.length - 1].split("[.]")[0];
+        this.modelName = modelName;
     }
 
     public boolean run() {
@@ -30,27 +20,14 @@ public class ConvertSimulink {
             MatlabEngine ml = MatlabEngine.startMatlab();
             System.out.println("Engine started.");
 
-            // Change directory
-            /*if (baseDir.length() > 0) {
-                ml.eval("cd %s".format(baseDir));
-                System.out.println("Directory changed to %s.".format(baseDir));
-            }*/
-
-            // load the simulink model
-            ml.eval("load_system('%s')".format(modelName));
-            System.out.println("System %s loaded.".format(modelName));
-
-            // set fixed-step solver
-            ml.eval("set_param('%s', 'SolverType', 'Fixed-step')".format(modelName));
-            System.out.println("Solver type is set.");
-
-            // export to fmu
-            ml.eval("exportToFMU('%s', 'FMIVersion', '2.0', 'FMUType', 'CS')".format(modelName));
-            System.out.println("Model exported.");
+            // define model name and run convert.m script
+            String command = String.format("model_name='%s';convert", modelName);
+            ml.eval(command);
 
             // Disconnect from the MATLAB session
             ml.disconnect();
             System.out.println("Disconnected.");
+
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             return false;

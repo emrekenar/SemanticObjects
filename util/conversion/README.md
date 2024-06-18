@@ -1,6 +1,4 @@
-Note: Only Linux is supported and MATLAB must be installed for Simulink conversion.
---------------------------
-From the source directory:
+To run, from the src directory:
 
 Compile:
 javac -classpath <matlabroot>/extern/engines/java/jar/engine.jar ConvertToFmu.java
@@ -8,10 +6,10 @@ javac -classpath <matlabroot>/extern/engines/java/jar/engine.jar ConvertToFmu.ja
 Run:
 java -Djava.library.path=<matlabroot>/bin/glnxa64 -classpath .:<matlabroot>/extern/engines/java/jar/engine.jar ConvertToFmu <filepath>
 
-Note: File has to copied into the same directory as the source file.
-Note: The file is not exported from inside the engine to the local folder.
-Note: OpenModelica conversion does not work
+Notes: Only Linux is supported. File has to copied into the same directory as the source file. MATLAB must be installed for Simulink conversion, and `omc` must be installed for OpenModelica conversion. For `.mo` files, class name must be equal to the file name without the extension.
+
 --------------------------
 References:
-2016-2017 The MathWorks, Inc.
+https://mathworks.com/products/simulink.html 2016-2017 The MathWorks, Inc.
+https://openmodelica.org
 https://smolang.org
